@@ -1,0 +1,50 @@
+{
+  "tours": [
+    {
+      "id": "eiffel-tower",
+      "place": "Eiffel Tower",
+      "city": "Paris",
+      "country": "France",
+      "image": "https://drive.google.com/uc?export=view&id=1yw70DedDrwp1W4H6G1XUF0kOlWTGUN-J",
+      "audio1min": "https://drive.google.com/uc?export=download&id=1oqZzbBH6XMD028yQ0VgI3p2pcg8Bn9IT",
+      "audio10min": ""
+    },
+    {
+      "id": "puerto-vallarta",
+      "place": "Puerto Vallarta",
+      "city": "Puerto Vallarta",
+      "country": "Mexico",
+      "image": "https://drive.google.com/uc?export=view&id=1QZUDlNE0gEDFrI4ul5Cl4FhfWP4UhSVb",
+      "audio1min": "https://drive.google.com/uc?export=download&id=1FK2c6JRNJgGaVd6c-EaBxEHO2-kz6dP1",
+      "audio10min": ""
+    },
+    {
+      "id": "chichen-itza",
+      "place": "Chichen Itza Archaeological Site",
+      "city": "Chichén Itzá Mayan",
+      "country": "Mexico",
+      "image": "https://drive.google.com/uc?export=view&id=16tmYb_pHKhyHyIS-MC2FY8YpYX_89Uqs",
+      "audio1min": "",
+      "audio10min": ""
+    },
+    {
+      "id": "tulum",
+      "place": "Tulum",
+      "city": "Tulum Mayan",
+      "country": "Mexico",
+      "image": "https://drive.google.com/uc?export=view&id=1CZeSR-TlUFGXxZ3GwGf_DmjsQ8GRH4AY",
+      "audio1min": "https://drive.google.com/uc?export=download&id=160XTMFPwzcz8uiF5q8j1X-g4JJVXPPDl",
+      "audio10min": "https://drive.google.com/uc?export=download&id=19WZoDG3kV9fGOpVB6luLlsP6d8Zi-BJe"
+    },
+    {
+      "id": "mexico-city",
+      "place": "Mexico City",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "image": "",
+      "audio1min": "",
+      "audio10min": ""
+    }
+  ]
+}
+ 
