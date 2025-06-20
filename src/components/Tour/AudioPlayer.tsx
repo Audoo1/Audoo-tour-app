@@ -14,6 +14,8 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -28,24 +30,52 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
 
     const updateTime = () => setCurrentTime(audio.currentTime);
     const handleEnded = () => setIsPlaying(false);
+    const handleLoadedMetadata = () => {
+      setIsLoading(false);
+      setError(null);
+      console.log('Audio loaded successfully:', audioUrl);
+      console.log('Duration:', audio.duration);
+    };
+    const handleError = (e: Event) => {
+      setIsLoading(false);
+      setError('Failed to load audio file');
+      console.error('Audio error:', e);
+      console.error('Audio URL:', audioUrl);
+    };
+    const handleLoadStart = () => {
+      setIsLoading(true);
+      setError(null);
+      console.log('Loading audio:', audioUrl);
+    };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('loadstart', handleLoadStart);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('loadstart', handleLoadStart);
     };
-  }, []);
+  }, [audioUrl]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
+      try {
+        if (isPlaying) {
+          audioRef.current.pause();
+        } else {
+          await audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+      } catch (err) {
+        console.error('Play error:', err);
+        setError('Failed to play audio');
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -72,7 +102,15 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+      <audio ref={audioRef} src={audioUrl} preload="metadata" crossOrigin="anonymous" />
+      
+      {/* Debug Info */}
+      <div className="mb-4 p-3 bg-gray-100 rounded text-xs">
+        <p><strong>Audio URL:</strong> {audioUrl}</p>
+        <p><strong>Loading:</strong> {isLoading ? 'Yes' : 'No'}</p>
+        <p><strong>Duration:</strong> {totalDuration ? formatTime(totalDuration) : 'Unknown'}</p>
+        {error && <p className="text-red-600"><strong>Error:</strong> {error}</p>}
+      </div>
       
       {/* Title */}
       <div className="text-center mb-6">
@@ -93,6 +131,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
           value={currentTime}
           onChange={handleSeek}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+          disabled={!totalDuration}
         />
       </div>
 
@@ -104,7 +143,8 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
         
         <button
           onClick={togglePlay}
-          className="p-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg"
+          disabled={!totalDuration || isLoading}
+          className="p-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPlaying ? (
             <Pause className="h-8 w-8 text-white" />
