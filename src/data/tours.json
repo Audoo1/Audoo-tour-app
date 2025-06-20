@@ -15,7 +15,7 @@
       "city": "Puerto Vallarta",
       "country": "Mexico",
       "image": "https://drive.google.com/uc?export=view&id=1QZUDlNE0gEDFrI4ul5Cl4FhfWP4UhSVb",
-      "audio1min": "https://drive.google.com/uc?export=download&id=1FK2c6JRNJgGaVd6c-EaBxEHO2-kz6dP1",
+      "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Puerto%20Vallarta_Mexico_1%20min-2yJRBt016784qOMLYJZjNV04qkaPPq.mp3",
       "audio10min": ""
     },
     {
@@ -32,9 +32,9 @@
       "place": "Tulum",
       "city": "Tulum Mayan",
       "country": "Mexico",
-      "image": "https://drive.google.com/uc?export=view&id=1CZeSR-TlUFGXxZ3GwGf_DmjsQ8GRH4AY",
-      "audio1min": "https://drive.google.com/uc?export=download&id=160XTMFPwzcz8uiF5q8j1X-g4JJVXPPDl",
-      "audio10min": "https://drive.google.com/uc?export=download&id=19WZoDG3kV9fGOpVB6luLlsP6d8Zi-BJe"
+      "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum-ZKnt7MmN3Lp4t8TCTQiJRu1cW6jFKM.jpg",
+      "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum%20Mexico_1min-BHth58wGLcrfu1B5rhKPBGpnfzG3FZ.mp3",
+      "audio10min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum%20Mexico_10mins-Kij9BllCqvRoWP1piYowqSHMRDFyPF.mp3"
     },
     {
       "id": "mexico-city",
