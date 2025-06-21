@@ -9,7 +9,7 @@ import AudioPlayer from '@/components/Tour/AudioPlayer';
 import { Tour } from '@/types/tour';
 import { fetchToursFromCSV } from '@/utils/csvParser';
 
-const CSV_URL = 'https://www.dropbox.com/scl/fi/kmai65mtk65qzgtkf31rn/tours.csv?rlkey=avqsseenw75zdlfycqhrs2vam&st=7unbmkc8&dl=0';
+const CSV_URL = 'https://www.dropbox.com/scl/fi/kmai65mtk65qzgtkf31rn/tours.csv?rlkey=avqsseenw75zdlfycqhrs2vam&st=7unbmkc8&raw=1';
 
 export default function TourDetailPage() {
   const params = useParams();
