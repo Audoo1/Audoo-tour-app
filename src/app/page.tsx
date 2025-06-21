@@ -5,16 +5,34 @@ import Header from '@/components/Layout/Header';
 import SearchBar from '@/components/UI/SearchBar';
 import TourCard from '@/components/Home/TourCard';
 import { Tour } from '@/types/tour';
-import toursData from '@/data/tours.json';
+import { fetchToursFromCSV } from '@/utils/csvParser';
+
+const CSV_URL = 'https://www.dropbox.com/scl/fi/pjphgsxrugwql8nr3hy1w/tours.csv?rlkey=14la6binudmu33bfkfwfb5obe&st=ay2b9jhc&raw=1';
 
 export default function HomePage() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setTours(toursData.tours);
-    setFilteredTours(toursData.tours.slice(0, 8)); // Show first 8 by default
+    const loadTours = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const toursData = await fetchToursFromCSV(CSV_URL);
+        setTours(toursData);
+        setFilteredTours(toursData.slice(0, 8)); // Show first 8 by default
+      } catch (err) {
+        console.error('Error loading tours:', err);
+        setError('Failed to load tours. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTours();
   }, []);
 
   const handleSearch = (query: string) => {
@@ -33,6 +51,41 @@ export default function HomePage() {
     
     setFilteredTours(filtered);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Header />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading tours...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Header />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Tours</h3>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+            >
+              Try Again
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
