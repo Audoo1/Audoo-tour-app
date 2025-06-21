@@ -191,12 +191,24 @@ export class AudioAccessControl {
 
   private async recordLoggedUserAccess(userId: string, tourId: string): Promise<void> {
     try {
+      // Get current counts first
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('monthly_audio_count, yearly_audio_count')
+        .eq('id', userId)
+        .single();
+
+      if (profileError || !profile) {
+        console.error('Error fetching profile for audio count update:', profileError);
+        return;
+      }
+
       // Update audio count
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
-          monthly_audio_count: supabase.sql`monthly_audio_count + 1`,
-          yearly_audio_count: supabase.sql`yearly_audio_count + 1`
+          monthly_audio_count: profile.monthly_audio_count + 1,
+          yearly_audio_count: profile.yearly_audio_count + 1
         })
         .eq('id', userId);
 
