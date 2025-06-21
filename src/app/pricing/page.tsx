@@ -179,12 +179,21 @@ export default function PricingPage() {
                 <div className="mb-4">
                   {billingCycle === 'monthly' ? (
                     <div>
-                      <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
-                      <span className="text-gray-600">/month</span>
-                      {plan.originalPrice && (
-                        <div className="mt-1">
-                          <span className="text-lg text-gray-400 line-through">${plan.originalPrice}</span>
-                          <span className="ml-2 text-sm text-green-600 font-medium">69% off</span>
+                      {plan.name === 'Premium Yearly' ? (
+                        <div>
+                          <span className="text-4xl font-bold text-gray-900">$250</span>
+                          <span className="text-gray-600">/year</span>
+                        </div>
+                      ) : (
+                        <div>
+                          <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+                          <span className="text-gray-600">/month</span>
+                          {plan.originalPrice && (
+                            <div className="mt-1">
+                              <span className="text-lg text-gray-400 line-through">${plan.originalPrice}</span>
+                              <span className="ml-2 text-sm text-green-600 font-medium">69% off</span>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -255,6 +264,59 @@ export default function PricingPage() {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Referral Structure Section */}
+        <div className="mt-16 max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-200">
+            <div className="text-center mb-6">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Earn While You Travel</h2>
+              <p className="text-xl text-gray-600">
+                Share Voxtrav with friends and earn amazing rewards!
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🎁</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Free Months</h3>
+                <p className="text-gray-600 text-sm">
+                  Earn 1-3 free months for every successful referral
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">💰</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Cash Rewards</h3>
+                <p className="text-gray-600 text-sm">
+                  Get 40% cash commission after hitting your quota
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🔗</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Invite System</h3>
+                <p className="text-gray-600 text-sm">
+                  Free users get 2 invites, paid users get 5-10 per month
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <Link 
+                href="/referrals" 
+                className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              >
+                Learn More About Referrals →
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* FAQ Section */}

@@ -7,6 +7,7 @@ import SearchBar from '@/components/UI/SearchBar';
 import TourCard from '@/components/Home/TourCard';
 import { Tour } from '@/types/tour';
 import toursData from '@/data/tours.json';
+import Link from 'next/link';
 
 export default function HomePage() {
   const [tours, setTours] = useState<Tour[]>([]);
@@ -168,6 +169,63 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Flexible Speed</h3>
                 <p className="text-gray-600">Control playback speed to match your pace</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Referrals Section */}
+        {!searchQuery && (
+          <div className="mt-16 pt-16 border-t border-gray-200">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-200">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  Earn While You Travel
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Share Voxtrav with friends and earn amazing rewards! Get free months or cash rewards for every successful referral.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🎁</span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Free Months</h3>
+                  <p className="text-gray-600 text-sm">
+                    Earn 1-3 free months for every successful referral
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">💰</span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Cash Rewards</h3>
+                  <p className="text-gray-600 text-sm">
+                    Get 40% cash commission after hitting your quota
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🔗</span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Invite System</h3>
+                  <p className="text-gray-600 text-sm">
+                    Free users get 2 invites, paid users get 5-10 per month
+                  </p>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <Link 
+                  href="/referrals" 
+                  className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                >
+                  Learn More About Referrals →
+                </Link>
               </div>
             </div>
           </div>

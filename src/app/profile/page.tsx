@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { User, Settings, Bookmark, Headphones, LogOut, Edit, Camera, MessageSquare, FileText, Save, X } from 'lucide-react'
+import { User, Settings, Bookmark, Headphones, LogOut, Edit, Camera, MessageSquare, FileText, Save, X, Gift } from 'lucide-react'
 import SignInForm from '@/components/Auth/SignInForm'
 import SignUpForm from '@/components/Auth/SignUpForm'
 import SelfNotes from '@/components/Profile/SelfNotes'
@@ -286,6 +286,7 @@ export default function ProfilePage() {
                 { id: 'history', label: 'History', icon: Headphones },
                 { id: 'notes', label: 'Notes', icon: FileText },
                 { id: 'feedback', label: 'Feedback', icon: MessageSquare },
+                { id: 'referrals', label: 'Referrals', icon: Gift },
                 { id: 'settings', label: 'Settings', icon: Settings },
               ].map((tab) => (
                 <button
@@ -415,6 +416,23 @@ export default function ProfilePage() {
             {activeTab === 'feedback' && (
               <div>
                 <FeedbackForm />
+              </div>
+            )}
+
+            {/* Referrals Tab */}
+            {activeTab === 'referrals' && (
+              <div className="text-center py-8">
+                <Gift className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Referral Program</h3>
+                <p className="text-gray-600 mb-6">
+                  Manage your referrals, track earnings, and share invite links
+                </p>
+                <a
+                  href="/referrals"
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Go to Referrals →
+                </a>
               </div>
             )}
 
