@@ -83,7 +83,7 @@ export default function HomePage() {
 
         {/* Search Section */}
         <div className="mb-8">
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} currentQuery={searchQuery} />
         </div>
 
         {/* Results Info */}
