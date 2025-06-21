@@ -214,6 +214,7 @@ export default function TourDetailPage() {
                 audioUrl={currentAudio}
                 title={tour.place}
                 duration={currentDuration}
+                tourId={tour.id}
                 onAudioChange={handleAudioChange}
                 onAudioStart={handleAudioStart}
                 onAudioEnd={handleAudioEnd}

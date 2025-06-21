@@ -48,6 +48,22 @@ export default function Header() {
               How it works?
             </Link>
             
+            <Link 
+              href="/pricing" 
+              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+            >
+              Pricing
+            </Link>
+            
+            {user && (
+              <Link 
+                href="/referrals" 
+                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+              >
+                Referrals
+              </Link>
+            )}
+            
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link 
@@ -97,6 +113,24 @@ export default function Header() {
               >
                 How it works?
               </Link>
+              
+              <Link 
+                href="/pricing" 
+                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Pricing
+              </Link>
+              
+              {user && (
+                <Link 
+                  href="/referrals" 
+                  className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Referrals
+                </Link>
+              )}
               
               {user ? (
                 <>

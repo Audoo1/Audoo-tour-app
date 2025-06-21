@@ -1,18 +1,30 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, Settings } from 'lucide-react';
+import { Play, Pause, Volume2, Settings, Lock, Crown, AlertCircle } from 'lucide-react';
+import { audioAccessControl, AudioAccessResult } from '@/lib/audioAccessControl';
+import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 interface AudioPlayerProps {
   audioUrl: string;
   title: string;
   duration: string;
+  tourId: string;
   onAudioChange: (audioUrl: string, duration: string) => void;
   onAudioStart?: () => void;
   onAudioEnd?: () => void;
 }
 
-export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, onAudioStart, onAudioEnd }: AudioPlayerProps) {
+export default function AudioPlayer({ 
+  audioUrl, 
+  title, 
+  duration, 
+  tourId,
+  onAudioChange, 
+  onAudioStart, 
+  onAudioEnd 
+}: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -20,6 +32,9 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [accessResult, setAccessResult] = useState<AudioAccessResult | null>(null);
+  const [accessInfo, setAccessInfo] = useState<any>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const speedOptions = [
@@ -30,6 +45,21 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
     { value: 1.5, label: '1.5x' },
     { value: 2, label: '2x' },
   ];
+
+  useEffect(() => {
+    checkAccess();
+    loadAccessInfo();
+  }, [tourId]);
+
+  const checkAccess = async () => {
+    const result = await audioAccessControl.checkAudioAccess(tourId);
+    setAccessResult(result);
+  };
+
+  const loadAccessInfo = async () => {
+    const info = await audioAccessControl.getAccessInfo();
+    setAccessInfo(info);
+  };
 
   useEffect(() => {
     if (audioRef.current) {
@@ -88,12 +118,19 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
   }, [audioUrl, onAudioStart, onAudioEnd]);
 
   const togglePlay = async () => {
+    if (!accessResult?.canAccess) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
     if (audioRef.current) {
       try {
         if (isPlaying) {
           audioRef.current.pause();
         } else {
           await audioRef.current.play();
+          // Record access when audio starts playing
+          await audioAccessControl.recordAudioAccess(tourId);
         }
         setIsPlaying(!isPlaying);
       } catch (err) {
@@ -129,6 +166,58 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
 
   const totalDuration = audioRef.current?.duration || 0;
 
+  // Access control overlay
+  if (!accessResult?.canAccess) {
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+        <div className="text-center">
+          <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+            <Lock className="w-8 h-8 text-red-600" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+          <p className="text-gray-600 mb-4">Audio Tour - {duration}</p>
+          
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="flex items-start">
+              <AlertCircle className="w-5 h-5 text-red-600 mr-2 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-red-800 font-medium mb-1">Access Restricted</p>
+                <p className="text-red-700 text-sm">{accessResult?.reason}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {!accessInfo?.isLoggedIn ? (
+              <Link
+                href="/signup"
+                className="block w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              >
+                Sign Up to Continue
+              </Link>
+            ) : (
+              <Link
+                href="/pricing"
+                className="block w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              >
+                Upgrade Your Plan
+              </Link>
+            )}
+            
+            {accessInfo?.isLoggedIn && (
+              <div className="text-sm text-gray-600">
+                <p>Current plan: <span className="font-medium capitalize">{accessInfo.plan}</span></p>
+                {accessInfo.plan === 'free' && (
+                  <p>Used: {accessInfo.monthlyCount}/3 monthly, {accessInfo.yearlyCount}/5 yearly</p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
       <audio 
@@ -141,6 +230,34 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
       <div className="text-center mb-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
         <p className="text-gray-600">Audio Tour - {duration}</p>
+        
+        {/* Access Info */}
+        {accessInfo && (
+          <div className="mt-3 text-sm">
+            {accessInfo.isLoggedIn ? (
+              <div className="flex items-center justify-center space-x-4">
+                <span className="text-gray-600">
+                  Plan: <span className="font-medium capitalize">{accessInfo.plan}</span>
+                </span>
+                {accessInfo.plan === 'free' && accessInfo.remainingCount !== -1 && (
+                  <span className="text-gray-600">
+                    Remaining: <span className="font-medium">{accessInfo.remainingCount}</span>
+                  </span>
+                )}
+                {accessInfo.plan === 'premium' && (
+                  <span className="flex items-center text-purple-600">
+                    <Crown className="w-4 h-4 mr-1" />
+                    Premium
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="text-gray-600">
+                Guest access: <span className="font-medium">{accessInfo.remainingCount}</span> tours remaining
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Error Message */}
@@ -199,49 +316,64 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, 
         {/* Play/Pause Button */}
         <button
           onClick={togglePlay}
-          disabled={!totalDuration || isLoading || !!error}
-          className="p-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isLoading}
+          className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isPlaying ? (
-            <Pause className="h-8 w-8 text-white" />
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+          ) : isPlaying ? (
+            <Pause className="w-6 h-6" />
           ) : (
-            <Play className="h-8 w-8 text-white ml-1" />
+            <Play className="w-6 h-6 ml-1" />
           )}
         </button>
+
+        {/* Volume Control */}
+        <div className="flex items-center space-x-2">
+          <Volume2 className="h-4 w-4 text-gray-600" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-20 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
       </div>
 
-      {/* Volume Control */}
-      <div className="flex items-center space-x-3">
-        <Volume2 className="h-5 w-5 text-gray-600" />
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-        />
-      </div>
-
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          height: 16px;
-          width: 16px;
-          border-radius: 50%;
-          background: #3b82f6;
-          cursor: pointer;
-        }
-        .slider::-moz-range-thumb {
-          height: 16px;
-          width: 16px;
-          border-radius: 50%;
-          background: #3b82f6;
-          cursor: pointer;
-          border: none;
-        }
-      `}</style>
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md mx-4">
+            <div className="text-center">
+              <div className="mx-auto w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                <Crown className="w-6 h-6 text-primary-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Upgrade Your Plan</h3>
+              <p className="text-gray-600 mb-6">
+                {accessResult?.reason || 'Upgrade to access unlimited audio tours and premium features.'}
+              </p>
+              
+              <div className="space-y-3">
+                <Link
+                  href="/pricing"
+                  className="block w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                >
+                  View Plans
+                </Link>
+                <button
+                  onClick={() => setShowUpgradeModal(false)}
+                  className="block w-full bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                >
+                  Maybe Later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
