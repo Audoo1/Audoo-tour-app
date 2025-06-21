@@ -7,7 +7,7 @@ import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import Header from '@/components/Layout/Header';
 import AudioPlayer from '@/components/Tour/AudioPlayer';
 import { Tour } from '@/types/tour';
-import { fetchToursFromCSV } from '@/utils/csvParser';
+import toursData from '@/data/tours.json';
 
 export default function TourDetailPage() {
   const params = useParams();
@@ -19,12 +19,11 @@ export default function TourDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadTour = async () => {
+    const loadTour = () => {
       try {
         setIsLoading(true);
         setError(null);
         const tourId = params.id as string;
-        const toursData = await fetchToursFromCSV();
         const foundTour = toursData.find(t => t.id === tourId);
         
         if (foundTour) {
