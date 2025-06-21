@@ -33,19 +33,14 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
     const handleLoadedMetadata = () => {
       setIsLoading(false);
       setError(null);
-      console.log('Audio loaded successfully:', audioUrl);
-      console.log('Duration:', audio.duration);
     };
     const handleError = (e: Event) => {
       setIsLoading(false);
       setError('Failed to load audio file');
-      console.error('Audio error:', e);
-      console.error('Audio URL:', audioUrl);
     };
     const handleLoadStart = () => {
       setIsLoading(true);
       setError(null);
-      console.log('Loading audio:', audioUrl);
     };
 
     audio.addEventListener('timeupdate', updateTime);
@@ -73,7 +68,6 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
         }
         setIsPlaying(!isPlaying);
       } catch (err) {
-        console.error('Play error:', err);
         setError('Failed to play audio');
       }
     }
@@ -103,14 +97,6 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
       <audio ref={audioRef} src={audioUrl} preload="metadata" crossOrigin="anonymous" />
-      
-      {/* Debug Info */}
-      <div className="mb-4 p-3 bg-gray-100 rounded text-xs">
-        <p><strong>Audio URL:</strong> {audioUrl}</p>
-        <p><strong>Loading:</strong> {isLoading ? 'Yes' : 'No'}</p>
-        <p><strong>Duration:</strong> {totalDuration ? formatTime(totalDuration) : 'Unknown'}</p>
-        {error && <p className="text-red-600"><strong>Error:</strong> {error}</p>}
-      </div>
       
       {/* Title */}
       <div className="text-center mb-6">
