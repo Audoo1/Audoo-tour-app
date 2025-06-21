@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import Logo from '@/components/UI/Logo'
 
 interface SignInFormProps {
   onSuccess: () => void
@@ -41,6 +42,10 @@ export default function SignInForm({ onSuccess, onSwitchToSignUp }: SignInFormPr
 
   return (
     <div className="w-full max-w-md mx-auto">
+      <div className="text-center mb-8">
+        <Logo size="md" className="mx-auto" />
+      </div>
+      
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">

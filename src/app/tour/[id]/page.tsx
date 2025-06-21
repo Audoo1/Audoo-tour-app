@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import Header from '@/components/Layout/Header';
+import Footer from '@/components/Layout/Footer';
 import AudioPlayer from '@/components/Tour/AudioPlayer';
 import BookmarkButton from '@/components/UI/BookmarkButton';
 import { Tour } from '@/types/tour';
@@ -83,23 +84,24 @@ export default function TourDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
         <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading tour...</p>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   if (error || !tour) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
         <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
           <div className="text-center py-12">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
@@ -113,15 +115,16 @@ export default function TourDetailPage() {
             </button>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
         {/* Back Button */}
         <button
           onClick={() => router.push('/')}
@@ -225,6 +228,8 @@ export default function TourDetailPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 } 

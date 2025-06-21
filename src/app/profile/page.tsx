@@ -10,6 +10,8 @@ import FeedbackForm from '@/components/Profile/FeedbackForm'
 import { getUserPreferences, updateUserPreferences, getBookmarks, getTourHistory } from '@/lib/userService'
 import { UserPreferences, Bookmark as BookmarkType, TourHistory } from '@/lib/userService'
 import tours from '@/data/tours.json'
+import Logo from '@/components/UI/Logo'
+import Footer from '@/components/Layout/Footer'
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
@@ -149,8 +151,15 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto p-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Logo with Home Link */}
+      <div className="bg-white border-b border-gray-200 py-4">
+        <div className="max-w-6xl mx-auto px-6">
+          <Logo size="md" />
+        </div>
+      </div>
+      
+      <div className="max-w-6xl mx-auto p-6 flex-1">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
@@ -472,6 +481,8 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   )
 } 

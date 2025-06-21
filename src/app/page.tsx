@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Header from '@/components/Layout/Header';
+import Footer from '@/components/Layout/Footer';
 import SearchBar from '@/components/UI/SearchBar';
 import TourCard from '@/components/Home/TourCard';
 import { Tour } from '@/types/tour';
@@ -39,30 +40,31 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
         <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading tours...</p>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Your Voice-Guided
             <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent"> Travel Companion</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-6">
             Discover hidden stories, local secrets, and authentic experiences through immersive audio tours
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500">
@@ -82,7 +84,7 @@ export default function HomePage() {
         </div>
 
         {/* Search Section */}
-        <div className="mb-8">
+        <div className="mb-6">
           <SearchBar onSearch={handleSearch} currentQuery={searchQuery} />
         </div>
 
@@ -171,6 +173,8 @@ export default function HomePage() {
           </div>
         )}
       </main>
+      
+      <Footer />
     </div>
   );
 } 

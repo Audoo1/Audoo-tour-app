@@ -1,6 +1,7 @@
 'use client';
 
 import Header from '@/components/Layout/Header';
+import Footer from '@/components/Layout/Footer';
 import { ArrowLeft, Play, Search, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -8,10 +9,10 @@ export default function HowItWorksPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       <Header />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
         {/* Back Button */}
         <button
           onClick={() => router.push('/')}
@@ -95,6 +96,8 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </main>
+      
+      <Footer />
     </div>
   );
 } 
