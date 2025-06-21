@@ -43,11 +43,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
     const handleError = (e: Event) => {
       setIsLoading(false);
       console.error('Audio error:', e);
-      if (audioUrl.includes('dropbox.com')) {
-        setError('Dropbox audio may have CORS restrictions. Try downloading the file or using a different host.');
-      } else {
-        setError('Failed to load audio file');
-      }
+      setError('Failed to load audio file. Please check the URL and try again.');
     };
     const handleLoadStart = () => {
       setIsLoading(true);
@@ -80,7 +76,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
         setIsPlaying(!isPlaying);
       } catch (err) {
         console.error('Play error:', err);
-        setError('Failed to play audio. This may be due to CORS restrictions.');
+        setError('Failed to play audio. Please try again.');
       }
     }
   };
@@ -111,8 +107,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
       <audio 
         ref={audioRef} 
         src={audioUrl} 
-        preload="metadata" 
-        crossOrigin={audioUrl.includes('dropbox.com') ? "anonymous" : undefined}
+        preload="metadata"
       />
       
       {/* Title */}
@@ -125,11 +120,6 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-red-700 text-sm">{error}</p>
-          {audioUrl.includes('dropbox.com') && (
-            <p className="text-red-600 text-xs mt-1">
-              Tip: Consider hosting audio files on a CORS-friendly service like Vercel Blob or AWS S3.
-            </p>
-          )}
         </div>
       )}
 
