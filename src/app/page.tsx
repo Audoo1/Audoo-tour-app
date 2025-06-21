@@ -9,24 +9,64 @@ import { fetchToursFromCSV } from '@/utils/csvParser';
 
 const CSV_URL = 'https://www.dropbox.com/scl/fi/pjphgsxrugwql8nr3hy1w/tours.csv?rlkey=14la6binudmu33bfkfwfb5obe&st=ay2b9jhc&raw=1';
 
+// Fallback static data
+const FALLBACK_TOURS: Tour[] = [
+  {
+    id: "eiffel-tower",
+    place: "Eiffel Tower",
+    city: "Paris",
+    country: "France",
+    image: "https://drive.google.com/uc?export=view&id=1yw70DedDrwp1W4H6G1XUF0kOlWTGUN-J",
+    audio1min: "https://drive.google.com/uc?export=download&id=1oqZzbBH6XMD028yQ0VgI3p2pcg8Bn9IT",
+    audio10min: ""
+  },
+  {
+    id: "puerto-vallarta",
+    place: "Puerto Vallarta",
+    city: "Puerto Vallarta",
+    country: "Mexico",
+    image: "https://drive.google.com/uc?export=view&id=1QZUDlNE0gEDFrI4ul5Cl4FhfWP4UhSVb",
+    audio1min: "https://drive.google.com/uc?export=download&id=1FK2c6JRNJgGaVd6c-EaBxEHO2-kz6dP1",
+    audio10min: ""
+  }
+];
+
 export default function HomePage() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [filteredTours, setFilteredTours] = useState<Tour[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
     const loadTours = async () => {
       try {
+        console.log('Starting to load tours from CSV...');
         setIsLoading(true);
         setError(null);
+        setUsingFallback(false);
+        
+        console.log('CSV URL:', CSV_URL);
         const toursData = await fetchToursFromCSV(CSV_URL);
-        setTours(toursData);
-        setFilteredTours(toursData.slice(0, 8)); // Show first 8 by default
+        console.log('Tours loaded from CSV:', toursData);
+        console.log('Number of tours:', toursData.length);
+        
+        if (toursData.length > 0) {
+          setTours(toursData);
+          setFilteredTours(toursData.slice(0, 8));
+        } else {
+          throw new Error('No tours found in CSV');
+        }
       } catch (err) {
-        console.error('Error loading tours:', err);
-        setError('Failed to load tours. Please try again later.');
+        console.error('Error loading tours from CSV:', err);
+        console.log('Using fallback data...');
+        
+        // Use fallback data
+        setTours(FALLBACK_TOURS);
+        setFilteredTours(FALLBACK_TOURS.slice(0, 8));
+        setUsingFallback(true);
+        setError('Using fallback data - CSV loading failed');
       } finally {
         setIsLoading(false);
       }
@@ -39,7 +79,7 @@ export default function HomePage() {
     setSearchQuery(query);
     
     if (!query.trim()) {
-      setFilteredTours(tours.slice(0, 8)); // Show first 8 when no search
+      setFilteredTours(tours.slice(0, 8));
       return;
     }
 
@@ -66,27 +106,6 @@ export default function HomePage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center py-12">
-            <div className="text-red-500 text-6xl mb-4">⚠️</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Tours</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
-            >
-              Try Again
-            </button>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header />
@@ -106,6 +125,19 @@ export default function HomePage() {
         {/* Search Section */}
         <div className="mb-8">
           <SearchBar onSearch={handleSearch} />
+        </div>
+
+        {/* Debug Info */}
+        <div className="mb-6 p-4 bg-gray-100 rounded-lg">
+          <p className="text-sm text-gray-600">
+            <strong>Debug Info:</strong> Loaded {tours.length} tours, showing {filteredTours.length} tours
+            {usingFallback && <span className="text-orange-600"> (using fallback data)</span>}
+          </p>
+          {error && (
+            <p className="text-sm text-red-600 mt-2">
+              <strong>Error:</strong> {error}
+            </p>
+          )}
         </div>
 
         {/* Results Info */}
