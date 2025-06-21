@@ -7,7 +7,9 @@ import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import Header from '@/components/Layout/Header';
 import AudioPlayer from '@/components/Tour/AudioPlayer';
 import { Tour } from '@/types/tour';
-import toursData from '@/data/tours.json';
+import { fetchToursFromCSV } from '@/utils/csvParser';
+
+const CSV_URL = 'https://www.dropbox.com/scl/fi/pjphgsxrugwql8nr3hy1w/tours.csv?rlkey=14la6binudmu33bfkfwfb5obe&st=ay2b9jhc&raw=1';
 
 export default function TourDetailPage() {
   const params = useParams();
@@ -15,17 +17,35 @@ export default function TourDetailPage() {
   const [tour, setTour] = useState<Tour | null>(null);
   const [currentAudio, setCurrentAudio] = useState('');
   const [currentDuration, setCurrentDuration] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const tourId = params.id as string;
-    const foundTour = toursData.tours.find(t => t.id === tourId);
-    
-    if (foundTour) {
-      setTour(foundTour);
-      // Default to 1 min audio if available
-      setCurrentAudio(foundTour.audio1min || foundTour.audio10min || '');
-      setCurrentDuration(foundTour.audio1min ? '1 min' : foundTour.audio10min ? '10 min' : '');
-    }
+    const loadTour = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const tourId = params.id as string;
+        const toursData = await fetchToursFromCSV(CSV_URL);
+        const foundTour = toursData.find(t => t.id === tourId);
+        
+        if (foundTour) {
+          setTour(foundTour);
+          // Default to 1 min audio if available
+          setCurrentAudio(foundTour.audio1min || foundTour.audio10min || '');
+          setCurrentDuration(foundTour.audio1min ? '1 min' : foundTour.audio10min ? '10 min' : '');
+        } else {
+          setError('Tour not found');
+        }
+      } catch (err) {
+        console.error('Error loading tour:', err);
+        setError('Failed to load tour. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTour();
   }, [params.id]);
 
   const handleAudioChange = (audioUrl: string, duration: string) => {
@@ -33,13 +53,30 @@ export default function TourDetailPage() {
     setCurrentDuration(duration);
   };
 
-  if (!tour) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Header />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Tour not found</h1>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading tour...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !tour) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Header />
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {error || 'Tour not found'}
+            </h1>
             <button
               onClick={() => router.push('/')}
               className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
@@ -47,7 +84,7 @@ export default function TourDetailPage() {
               Back to Home
             </button>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
