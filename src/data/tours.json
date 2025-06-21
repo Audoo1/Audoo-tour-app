@@ -4,8 +4,8 @@
     "place": "Eiffel Tower",
     "city": "Paris",
     "country": "France",
-    "image": "https://www.dropbox.com/scl/fi/395houohmv34elrtaz9ab/Eiffel-Tower.png?rlkey=4w3auhtibmcpljr7zbv5o3zy6&st=5ubuq81r&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/xobo10fue9swwrd0xarl5/Eiffel-Tower_1min_1.mp3?rlkey=442umd2p3pjci4m9bgy4447so&st=a4nbhy5b&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Eiffel%20Tower-bOqx1Bdregi05u9eI4uuep8MBIVklb.png",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Eiffel-Tower_1min_1-V1GpLtpLnktgWDVDC6FLXZw98jq2pJ.mp3",
     "audio10min": ""
   },
   {
@@ -13,8 +13,8 @@
     "place": "Puerto Vallarta",
     "city": "Puerto Vallarta",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/krrvy7ix1q8vulgy0gakr/Puerto-Vallarta.jpg?rlkey=16tpaeilt7onk0bb7cpdl6kjo&st=bsxpvcvu&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/ttee9zbyrks3bzsbn6hsc/Puerto-Vallarta_Mexico_1-min.mp3?rlkey=gvvq0x2y2dxr79rjn5iy570zy&st=rlschmhq&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Puerto%20Vallarta-clRhxKMSXhAmHzDmlXSd5bNvqR6pUt.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Puerto%20Vallarta_Mexico_1%20min-LQsWBnUAHw7pcQNiwGZkFjP8wzLPEf.mp3",
     "audio10min": ""
   },
   {
@@ -22,26 +22,26 @@
     "place": "Chichen Itza Archaeological Site",
     "city": "Chichén Itzá Mayan",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/jnd2a1ym9iuj6q6yxzb4g/Chichen_Itza.jpg?rlkey=h3cjtcl407jtkblp7smhh8bda&st=unshkfnk&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/7wttej2qysmvc68iyyfrf/Chichen-Itza-Archaeological-Site-in-Chichen-Itza-Mexico_1min_1.mp3?rlkey=7wns6cyj9217csao22p85tx56&st=zq9l5f5k&raw=1",
-    "audio10min": "https://www.dropbox.com/scl/fi/erz1cdstn126jckmq074i/Chichen-Itza-Archaeological-Site-in-Chichen-Itza-Mexico_10min.mp3?rlkey=5zy1txa7aiwiwna4jdx9iri1l&st=ijuzxjk1&raw=1"
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Chichen_Itza-d5cREhYA3GSzw7WVAu1aH2cwVdOceU.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Chichen%20Itza%20Archaeological%20Site%20in%20Chichen%20Itza%20Mexico_1min_1-w50bRFj7cDPeWKr4uzjui6jP11yOwv.mp3",
+    "audio10min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Chichen%20Itza%20Archaeological%20Site%20in%20Chichen%20Itza%20Mexico_10min-M7aLy31aPqFeNIwVBPVtT9mPfEvZWz.mp3"
   },
   {
     "id": "tulum",
     "place": "Tulum",
     "city": "Tulum Mayan",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/yjos9umb1r3znpy688git/Tulum.jpg?rlkey=4a7kgrwf8u3ke9gnq14ldae4r&st=6oytidnz&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/nbut6rwgnsmw2fg0s7pln/Tulum-Mexico_1min.mp3?rlkey=540ra0r4hqdjki1mhbwkko6ja&st=xsz1it29&raw=1",
-    "audio10min": "https://www.dropbox.com/scl/fi/ma8kwwi8r9cbo6s43gdti/Tulum-Mexico_10mins.mp3?rlkey=dr2f5g7cdwgs4vxdy1dj3nwea&st=qdz6ptr2&raw=1"
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum-JtPxqXRtubuff0ssYrU2ZDZXXaNXUY.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum%20Mexico_1min-HFZ8a63GHaaT8WeavtMpAtifscHTyG.mp3",
+    "audio10min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Tulum%20Mexico_10mins-x8GNj0aJRTu6vKuxE3MyDQZ7Hx3ZDS.mp3"
   },
   {
     "id": "mexico-city",
     "place": "Mexico City",
     "city": "Mexico City",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/jlu9pz5jwas2sxi8bqefp/Mexico-City.jpg?rlkey=61w5j39g88575bjg2sy651ryt&st=mkho236y&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/zc7j11yly57cw6wmtmifj/Mexico-City_Mexico_1-min.mp3?rlkey=f5pawxpgseftkh8hswe5k69f7&st=4cakjqtt&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Mexico%20City-UYPDEmCqNsiceguO6uzxIBI3VXPmiB.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Mexico%20City_Mexico_1%20min-brGQEz8OXOpGWjhutyhamS0MZrxXTX.mp3",
     "audio10min": ""
   },
   {
@@ -49,8 +49,8 @@
     "place": "Cancun",
     "city": "Cancun",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/nvkwhk6sdfenu1ryfdy1r/Cancun.jpg?rlkey=15b71qo3ukxj3ozysxctso9wt&st=b31hx6kd&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/ir4b6d932hbugj05nbduc/Cancun-Mexico_1min.mp3?rlkey=bpx4wf6gtyf3pgpkp71994u4z&st=11q6qz7w&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Cancun-gpAx8Bt6vXM1Av37aQDEvwvyRCAv6r.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Cancun%20Mexico_1min-xoaOJicqmrAdDCOIWsnf7MWxwI624k.mp3",
     "audio10min": ""
   },
   {
@@ -58,8 +58,8 @@
     "place": "Guanajuato",
     "city": "Guanajuato",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/tg9u02zxwk17sz2s1uy42/Guanajuato.jpg?rlkey=uwogs2apb8oq0rv2lor1jcz2n&st=aojhfpom&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/5s8c3v0xvnirmlsjq96mh/Guanajuato_Mexico_1-min.mp3?rlkey=ev2uee3hsp1096f93xwaaelsi&st=9b1s2hrf&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Guanajuato-WTI1z9KGzw6TYL8Ur2LQYbw984q9U1.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Guanajuato_Mexico_1%20min-3Ftt4aYKsaQWuxpDKan9uFrDbWawBL.mp3",
     "audio10min": ""
   },
   {
@@ -67,8 +67,8 @@
     "place": "San Miguel de Allende",
     "city": "San Miguel de Allende",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/2zrgaszdftjfh47e58iob/San-Miguel-de-Allende.jpg?rlkey=3yr7hy0hnck9bnrn2qegrt77e&st=0k7tj935&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/tiygbp87s6bsodxgjbgc0/San-Miguel-de-Allende_Mexico_1-Min.mp3?rlkey=cdiqjpathkj4qvjpr38y13ooz&st=d92vidrs&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/San%20Miguel%20de%20Allende-D2QGE1UM3fk4DVnMojKMpAa0rEiLU0.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/San%20Miguel%20de%20Allende_Mexico_1%20Min-AQUz63wK6dGSAlySUyIHCGTIAHdjwO.mp3",
     "audio10min": ""
   },
   {
@@ -76,8 +76,8 @@
     "place": "Los Cabos",
     "city": "Los Cabos",
     "country": "Mexico",
-    "image": "https://www.dropbox.com/scl/fi/3layfq74qab0n7vo8icz3/Los-Cabos.jpg?rlkey=b57w2s03m8ebxteexjy7n4ass&st=zavfibh1&raw=1",
-    "audio1min": "https://www.dropbox.com/scl/fi/jv6qj308wlgptnjerqaz3/Los-Cabos_Mexico_1-Min.mp3?rlkey=o3r59wob0qntnaemm6i44vh1t&st=qwpa147y&raw=1",
+    "image": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Los%20Cabos-LvvKHajUxoOlWmuclOo6EuPDJqWqIA.jpg",
+    "audio1min": "https://bqcpbnmjyesaivvg.public.blob.vercel-storage.com/Los%20Cabos_Mexico_1%20Min-PdQf2TSeO3gcXB2MSOL5UwpSpBA6Jj.mp3",
     "audio10min": ""
   }
 ]
