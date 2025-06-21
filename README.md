@@ -9,6 +9,7 @@ A modern web application for discovering and experiencing audio tours of amazing
 - 📱 **Responsive Design**: Works perfectly on desktop and mobile
 - 🎨 **Modern UI**: Beautiful, intuitive interface with Tailwind CSS
 - 📊 **Static Data**: Tour data stored in JSON format for reliability
+- ☁️ **Vercel Blob**: Optimized for Vercel Blob Storage for media files
 
 ## Tech Stack
 
@@ -16,6 +17,7 @@ A modern web application for discovering and experiencing audio tours of amazing
 - **Styling**: Tailwind CSS
 - **Deployment**: Netlify
 - **Data**: Static JSON files
+- **Media Storage**: Vercel Blob Storage
 
 ## Setup
 
@@ -23,6 +25,7 @@ A modern web application for discovering and experiencing audio tours of amazing
 
 - Node.js 18+ installed
 - npm or yarn package manager
+- Vercel account (for Blob Storage)
 
 ### Installation
 
@@ -37,12 +40,18 @@ cd Audoo
 npm install
 ```
 
-3. Run the development server:
+3. Set up Vercel Blob Storage:
+   - Create a Vercel account at [vercel.com](https://vercel.com)
+   - Install Vercel CLI: `npm i -g vercel`
+   - Run `vercel login` and follow the prompts
+   - Add your Vercel Blob token to environment variables
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Data Management
 
@@ -59,9 +68,9 @@ Your tour data should be stored in `src/data/tours.json` with the following stru
     "place": "Place Name",
     "city": "City Name",
     "country": "Country Name",
-    "image": "URL to image",
-    "audio1min": "URL to 1-minute audio",
-    "audio10min": "URL to 10-minute audio"
+    "image": "https://your-project.public.blob.vercel-storage.com/image.jpg",
+    "audio1min": "https://your-project.public.blob.vercel-storage.com/audio-1min.mp3",
+    "audio10min": "https://your-project.public.blob.vercel-storage.com/audio-10min.mp3"
   }
 ]
 ```
@@ -72,6 +81,30 @@ Your tour data should be stored in `src/data/tours.json` with the following stru
 2. Add new tours or modify existing ones
 3. Redeploy to see changes
 
+## Media Files with Vercel Blob
+
+### Uploading Files
+
+1. **Using the utility function:**
+```typescript
+import { uploadToVercelBlob } from '@/utils/vercelBlob';
+
+const file = // your file input
+const url = await uploadToVercelBlob(file);
+```
+
+2. **Manual upload:**
+   - Go to your Vercel dashboard
+   - Navigate to Storage > Blob
+   - Upload your files
+   - Copy the public URLs
+
+### Supported File Types
+
+- **Images**: JPG, PNG, WebP, AVIF
+- **Audio**: MP3, WAV, OGG, M4A
+- **Video**: MP4, WebM (if needed)
+
 ## Deployment
 
 ### Netlify Deployment
@@ -80,16 +113,20 @@ Your tour data should be stored in `src/data/tours.json` with the following stru
 2. Set build settings:
    - Build command: `npm run build`
    - Publish directory: `.next`
-3. Deploy!
+3. Add environment variables:
+   - `BLOB_READ_WRITE_TOKEN`: Your Vercel Blob token
+4. Deploy!
 
 The app includes:
 - Next.js optimization
 - Static data loading
 - Responsive design
+- Vercel Blob integration
 
 ### Environment Variables
 
-No environment variables are required for basic functionality.
+Required for Vercel Blob:
+- `BLOB_READ_WRITE_TOKEN`: Your Vercel Blob storage token
 
 ## Project Structure
 
@@ -107,22 +144,16 @@ src/
 ├── types/             # TypeScript type definitions
 ├── data/              # Static data files
 │   └── tours.json     # Tour data
-└── utils/             # Utility functions
+├── utils/             # Utility functions
+│   └── vercelBlob.ts  # Vercel Blob utilities
 ```
-
-## Audio Files
-
-Audio files should be hosted on a service that allows direct streaming (not download). Recommended options:
-- Vercel Blob Storage
-- AWS S3
-- Cloudinary
-- Dropbox (with raw=1 parameter)
-- Or upload to the `public/` folder for static hosting
 
 ## Troubleshooting
 
-### Audio Not Playing
-Ensure audio files are hosted on a service that allows direct streaming. Google Drive and Dropbox links often trigger downloads instead of streaming.
+### Audio/Image Not Loading
+- Ensure files are uploaded to Vercel Blob Storage
+- Check that URLs are correct in your JSON file
+- Verify your `BLOB_READ_WRITE_TOKEN` is set correctly
 
 ### Build Errors
 Make sure you're using Node.js 18+ and have all dependencies installed correctly.
