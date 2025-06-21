@@ -11,7 +11,7 @@ interface BookmarkButtonProps {
 }
 
 export default function BookmarkButton({ tourId, userId, className = '' }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false)
+  const [bookmarked, setBookmarked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export default function BookmarkButton({ tourId, userId, className = '' }: Bookm
 
   const checkBookmarkStatus = async () => {
     try {
-      const bookmarked = await isBookmarked(userId, tourId)
-      setIsBookmarked(bookmarked)
+      const bookmarkedStatus = await isBookmarked(userId, tourId)
+      setBookmarked(bookmarkedStatus)
     } catch (error) {
       console.error('Error checking bookmark status:', error)
     }
@@ -34,12 +34,12 @@ export default function BookmarkButton({ tourId, userId, className = '' }: Bookm
 
     setIsLoading(true)
     try {
-      if (isBookmarked) {
+      if (bookmarked) {
         await removeBookmark(userId, tourId)
-        setIsBookmarked(false)
+        setBookmarked(false)
       } else {
         await addBookmark(userId, tourId)
-        setIsBookmarked(true)
+        setBookmarked(true)
       }
     } catch (error) {
       console.error('Error toggling bookmark:', error)
@@ -53,13 +53,13 @@ export default function BookmarkButton({ tourId, userId, className = '' }: Bookm
       onClick={handleToggleBookmark}
       disabled={isLoading}
       className={`p-2 rounded-full transition-all duration-200 ${
-        isBookmarked
+        bookmarked
           ? 'bg-red-100 text-red-600 hover:bg-red-200'
           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
       } ${className}`}
     >
       <Heart
-        className={`w-5 h-5 ${isBookmarked ? 'fill-current' : ''}`}
+        className={`w-5 h-5 ${bookmarked ? 'fill-current' : ''}`}
       />
     </button>
   )
