@@ -7,8 +7,6 @@ import TourCard from '@/components/Home/TourCard';
 import { Tour } from '@/types/tour';
 import { fetchToursFromCSV } from '@/utils/csvParser';
 
-const CSV_URL = 'https://www.dropbox.com/scl/fi/pjphgsxrugwql8nr3hy1w/tours.csv?rlkey=14la6binudmu33bfkfwfb5obe&st=ay2b9jhc&raw=1';
-
 // Fallback static data
 const FALLBACK_TOURS: Tour[] = [
   {
@@ -42,13 +40,12 @@ export default function HomePage() {
   useEffect(() => {
     const loadTours = async () => {
       try {
-        console.log('Starting to load tours from CSV...');
+        console.log('Starting to load tours from CSV via Netlify function...');
         setIsLoading(true);
         setError(null);
         setUsingFallback(false);
         
-        console.log('CSV URL:', CSV_URL);
-        const toursData = await fetchToursFromCSV(CSV_URL);
+        const toursData = await fetchToursFromCSV();
         console.log('Tours loaded from CSV:', toursData);
         console.log('Number of tours:', toursData.length);
         
@@ -66,7 +63,7 @@ export default function HomePage() {
         setTours(FALLBACK_TOURS);
         setFilteredTours(FALLBACK_TOURS.slice(0, 8));
         setUsingFallback(true);
-        setError('Using fallback data - CSV loading failed');
+        setError(`Using fallback data - CSV loading failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
       } finally {
         setIsLoading(false);
       }
