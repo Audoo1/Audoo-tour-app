@@ -106,12 +106,21 @@ export default function TourDetailPage() {
             {/* Image */}
             <div className="relative h-96 rounded-xl overflow-hidden shadow-lg">
               {tour.image ? (
-                <Image
-                  src={tour.image}
-                  alt={tour.place}
-                  fill
-                  className="object-cover"
-                />
+                tour.image.includes('dropbox.com') ? (
+                  <img
+                    src={tour.image}
+                    alt={tour.place}
+                    className="object-cover w-full h-full"
+                    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                  />
+                ) : (
+                  <Image
+                    src={tour.image}
+                    alt={tour.place}
+                    fill
+                    className="object-cover"
+                  />
+                )
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
                   <span className="text-gray-500 text-lg">No image available</span>
