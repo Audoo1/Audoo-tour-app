@@ -2,11 +2,35 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Search, Menu, X, User, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
@@ -35,12 +59,34 @@ export default function Header() {
             >
               How it works?
             </Link>
-            <Link 
-              href="/profile" 
-              className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
-            >
-              Profile
-            </Link>
+            
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <Link 
+                  href="/profile" 
+                  className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                >
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <span>{user.user_metadata?.name || 'Profile'}</span>
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200 font-medium"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/profile" 
+                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -63,13 +109,37 @@ export default function Header() {
               >
                 How it works?
               </Link>
-              <Link 
-                href="/profile" 
-                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Profile
-              </Link>
+              
+              {user ? (
+                <>
+                  <Link 
+                    href="/profile" 
+                    className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    <span>{user.user_metadata?.name || 'Profile'}</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-colors duration-200 font-medium"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <Link 
+                  href="/profile" 
+                  className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+              )}
             </nav>
           </div>
         )}
