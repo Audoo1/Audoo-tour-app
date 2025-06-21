@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { User, Settings, Bookmark, Headphones, LogOut, Edit, Camera, MessageSquare, FileText } from 'lucide-react'
+import { User, Settings, Bookmark, Headphones, LogOut, Edit, Camera, MessageSquare, FileText, Save, X } from 'lucide-react'
 import SignInForm from '@/components/Auth/SignInForm'
 import SignUpForm from '@/components/Auth/SignUpForm'
 import SelfNotes from '@/components/Profile/SelfNotes'
