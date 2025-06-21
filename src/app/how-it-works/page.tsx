@@ -32,9 +32,9 @@ export default function HowItWorksPage() {
                 <Search className="h-6 w-6 text-primary-600" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">1. Discover Tours</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">1. Discover Audio Tours</h3>
                 <p className="text-gray-600">
-                  Browse through our collection of audio tours from amazing destinations around the world. 
+                  Browse through Vaxtrav collection of audio tours from amazing destinations around the world. 
                   Use the search bar to find specific places, cities, or countries.
                 </p>
               </div>
@@ -48,7 +48,7 @@ export default function HowItWorksPage() {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">2. Choose Your Tour</h3>
                 <p className="text-gray-600">
-                  Click on any tour card to view detailed information about the location. 
+                  Click on any tour card to view detailed Vaxtrav information about the location. 
                   Each tour includes high-quality images and immersive audio content.
                 </p>
               </div>
@@ -62,8 +62,10 @@ export default function HowItWorksPage() {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">3. Listen & Explore</h3>
                 <p className="text-gray-600">
-                  Use our Spotify-like audio player to listen to guided tours. Choose between 
+                  Use our Spotify-like audio player to listen to pre recorded guided tours. Choose between 
                   1-minute quick overviews or 10-minute detailed experiences.
+
+                  Avoid the hassle of booking a tour guide. All information is in your device on click of a button.
                 </p>
               </div>
             </div>

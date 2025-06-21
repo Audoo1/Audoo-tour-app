@@ -53,7 +53,7 @@ export default function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormPr
             <UserPlus className="w-6 h-6 text-green-600" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-          <p className="text-gray-600 mt-2">Join Audoo today</p>
+          <p className="text-gray-600 mt-2">Join Voxtrav today</p>
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-6">

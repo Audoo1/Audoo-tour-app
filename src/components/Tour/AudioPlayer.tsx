@@ -1,28 +1,42 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, SkipBack, SkipForward } from 'lucide-react';
+import { Play, Pause, Volume2, Settings } from 'lucide-react';
 
 interface AudioPlayerProps {
   audioUrl: string;
   title: string;
   duration: string;
   onAudioChange: (audioUrl: string, duration: string) => void;
+  onAudioStart?: () => void;
+  onAudioEnd?: () => void;
 }
 
-export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }: AudioPlayerProps) {
+export default function AudioPlayer({ audioUrl, title, duration, onAudioChange, onAudioStart, onAudioEnd }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [showSpeedMenu, setShowSpeedMenu] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  const speedOptions = [
+    { value: 0.5, label: '0.5x' },
+    { value: 0.75, label: '0.75x' },
+    { value: 1, label: '1x' },
+    { value: 1.25, label: '1.25x' },
+    { value: 1.5, label: '1.5x' },
+    { value: 2, label: '2x' },
+  ];
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
+      audioRef.current.playbackRate = playbackRate;
     }
-  }, [volume]);
+  }, [volume, playbackRate]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -35,7 +49,10 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
     setCurrentTime(0);
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const handleEnded = () => setIsPlaying(false);
+    const handleEnded = () => {
+      setIsPlaying(false);
+      onAudioEnd?.();
+    };
     const handleLoadedMetadata = () => {
       setIsLoading(false);
       setError(null);
@@ -49,12 +66,16 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
       setIsLoading(true);
       setError(null);
     };
+    const handlePlay = () => {
+      onAudioStart?.();
+    };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('ended', handleEnded);
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
     audio.addEventListener('error', handleError);
     audio.addEventListener('loadstart', handleLoadStart);
+    audio.addEventListener('play', handlePlay);
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
@@ -62,8 +83,9 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('error', handleError);
       audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('play', handlePlay);
     };
-  }, [audioUrl]);
+  }, [audioUrl, onAudioStart, onAudioEnd]);
 
   const togglePlay = async () => {
     if (audioRef.current) {
@@ -92,6 +114,11 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
+  };
+
+  const handleSpeedChange = (speed: number) => {
+    setPlaybackRate(speed);
+    setShowSpeedMenu(false);
   };
 
   const formatTime = (time: number) => {
@@ -142,10 +169,34 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
 
       {/* Controls */}
       <div className="flex items-center justify-center space-x-6 mb-6">
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-          <SkipBack className="h-6 w-6 text-gray-600" />
-        </button>
+        {/* Speed Control */}
+        <div className="relative">
+          <button
+            onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+            className="flex items-center space-x-1 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+          >
+            <Settings className="h-4 w-4 text-gray-600" />
+            <span className="text-sm font-medium text-gray-700">{playbackRate}x</span>
+          </button>
+          
+          {showSpeedMenu && (
+            <div className="absolute bottom-full left-0 mb-2 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10">
+              {speedOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleSpeedChange(option.value)}
+                  className={`block w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 transition-colors ${
+                    playbackRate === option.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         
+        {/* Play/Pause Button */}
         <button
           onClick={togglePlay}
           disabled={!totalDuration || isLoading || !!error}
@@ -156,10 +207,6 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
           ) : (
             <Play className="h-8 w-8 text-white ml-1" />
           )}
-        </button>
-        
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-          <SkipForward className="h-6 w-6 text-gray-600" />
         </button>
       </div>
 

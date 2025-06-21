@@ -4,14 +4,34 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Play } from 'lucide-react';
 import { Tour } from '@/types/tour';
+import BookmarkButton from '@/components/UI/BookmarkButton';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 interface TourCardProps {
   tour: Tour;
 }
 
 export default function TourCard({ tour }: TourCardProps) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Get current user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If clicking on bookmark button, don't navigate
+    if ((e.target as HTMLElement).closest('[data-bookmark]')) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   return (
-    <Link href={`/tour/${tour.id}`}>
+    <Link href={`/tour/${tour.id}`} onClick={handleCardClick}>
       <div className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-200">
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
@@ -32,6 +52,17 @@ export default function TourCard({ tour }: TourCardProps) {
           {(tour.audio1min || tour.audio10min) && (
             <div className="absolute top-3 right-3 bg-black bg-opacity-50 rounded-full p-2">
               <Play className="h-4 w-4 text-white" fill="white" />
+            </div>
+          )}
+
+          {/* Bookmark button */}
+          {user && (
+            <div className="absolute top-3 left-3" data-bookmark>
+              <BookmarkButton
+                tourId={tour.id}
+                userId={user.id}
+                className="bg-white bg-opacity-90 hover:bg-opacity-100"
+              />
             </div>
           )}
         </div>

@@ -41,13 +41,13 @@ export default function Header() {
             <div className="w-8 h-8 relative">
               <Image
                 src="https://drive.google.com/uc?export=view&id=1MkVDM5506g1XfcQZMI5XWILVyXAXgBre"
-                alt="Audoo Logo"
+                alt="Voxtrav Logo"
                 fill
                 className="object-contain"
               />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-              Audoo
+              Voxtrav
             </span>
           </Link>
 

@@ -6,8 +6,11 @@ import Image from 'next/image';
 import { ArrowLeft, MapPin, Play } from 'lucide-react';
 import Header from '@/components/Layout/Header';
 import AudioPlayer from '@/components/Tour/AudioPlayer';
+import BookmarkButton from '@/components/UI/BookmarkButton';
 import { Tour } from '@/types/tour';
 import toursData from '@/data/tours.json';
+import { supabase } from '@/lib/supabase';
+import { addTourHistory } from '@/lib/userService';
 
 export default function TourDetailPage() {
   const params = useParams();
@@ -17,8 +20,15 @@ export default function TourDetailPage() {
   const [currentDuration, setCurrentDuration] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [audioStartTime, setAudioStartTime] = useState<number | null>(null);
 
   useEffect(() => {
+    // Get current user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
     const loadTour = () => {
       try {
         setIsLoading(true);
@@ -48,6 +58,27 @@ export default function TourDetailPage() {
   const handleAudioChange = (audioUrl: string, duration: string) => {
     setCurrentAudio(audioUrl);
     setCurrentDuration(duration);
+  };
+
+  const handleAudioStart = () => {
+    setAudioStartTime(Date.now());
+  };
+
+  const handleAudioEnd = async () => {
+    if (user && tour && audioStartTime) {
+      const durationListened = Math.round((Date.now() - audioStartTime) / 1000);
+      
+      // Only record if they listened for at least 30 seconds
+      if (durationListened >= 30) {
+        try {
+          await addTourHistory(user.id, tour.id, durationListened);
+        } catch (error) {
+          console.error('Error recording tour history:', error);
+        }
+      }
+      
+      setAudioStartTime(null);
+    }
   };
 
   if (isLoading) {
@@ -117,6 +148,17 @@ export default function TourDetailPage() {
                   <span className="text-gray-500 text-lg">No image available</span>
                 </div>
               )}
+              
+              {/* Bookmark button */}
+              {user && (
+                <div className="absolute top-4 left-4">
+                  <BookmarkButton
+                    tourId={tour.id}
+                    userId={user.id}
+                    className="bg-white bg-opacity-90 hover:bg-opacity-100 shadow-lg"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Location Info */}
@@ -170,6 +212,8 @@ export default function TourDetailPage() {
                 title={tour.place}
                 duration={currentDuration}
                 onAudioChange={handleAudioChange}
+                onAudioStart={handleAudioStart}
+                onAudioEnd={handleAudioEnd}
               />
             ) : (
               <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 text-center">
