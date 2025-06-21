@@ -7,3 +7,15 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs" 
+
+  [[redirects]]
+  from = "https://www.voxtrav.info/*"
+  to = "https://voxtrav.info/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.voxtrav.info/*"
+  to = "https://voxtrav.info/:splat"
+  status = 301
+  force = true
