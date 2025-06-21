@@ -28,6 +28,12 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Reset state when audio URL changes
+    setIsLoading(true);
+    setError(null);
+    setIsPlaying(false);
+    setCurrentTime(0);
+
     const updateTime = () => setCurrentTime(audio.currentTime);
     const handleEnded = () => setIsPlaying(false);
     const handleLoadedMetadata = () => {
@@ -36,7 +42,12 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
     };
     const handleError = (e: Event) => {
       setIsLoading(false);
-      setError('Failed to load audio file');
+      console.error('Audio error:', e);
+      if (audioUrl.includes('dropbox.com')) {
+        setError('Dropbox audio may have CORS restrictions. Try downloading the file or using a different host.');
+      } else {
+        setError('Failed to load audio file');
+      }
     };
     const handleLoadStart = () => {
       setIsLoading(true);
@@ -68,7 +79,8 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
         }
         setIsPlaying(!isPlaying);
       } catch (err) {
-        setError('Failed to play audio');
+        console.error('Play error:', err);
+        setError('Failed to play audio. This may be due to CORS restrictions.');
       }
     }
   };
@@ -96,13 +108,30 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-      <audio ref={audioRef} src={audioUrl} preload="metadata" crossOrigin="anonymous" />
+      <audio 
+        ref={audioRef} 
+        src={audioUrl} 
+        preload="metadata" 
+        crossOrigin={audioUrl.includes('dropbox.com') ? "anonymous" : undefined}
+      />
       
       {/* Title */}
       <div className="text-center mb-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-1">{title}</h3>
-        <p className="text-gray-600">Audio Tour</p>
+        <p className="text-gray-600">Audio Tour - {duration}</p>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-700 text-sm">{error}</p>
+          {audioUrl.includes('dropbox.com') && (
+            <p className="text-red-600 text-xs mt-1">
+              Tip: Consider hosting audio files on a CORS-friendly service like Vercel Blob or AWS S3.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Progress Bar */}
       <div className="mb-4">
@@ -117,7 +146,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
           value={currentTime}
           onChange={handleSeek}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-          disabled={!totalDuration}
+          disabled={!totalDuration || isLoading}
         />
       </div>
 
@@ -129,7 +158,7 @@ export default function AudioPlayer({ audioUrl, title, duration, onAudioChange }
         
         <button
           onClick={togglePlay}
-          disabled={!totalDuration || isLoading}
+          disabled={!totalDuration || isLoading || !!error}
           className="p-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPlaying ? (
