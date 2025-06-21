@@ -34,7 +34,7 @@ export default function HowItWorksPage() {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">1. Discover Audio Tours</h3>
                 <p className="text-gray-600">
-                  Browse through Vaxtrav collection of audio tours from amazing destinations around the world. 
+                  Browse through Voxtrav collection of audio tours from amazing destinations around the world. 
                   Use the search bar to find specific places, cities, or countries.
                 </p>
               </div>
@@ -48,7 +48,7 @@ export default function HowItWorksPage() {
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">2. Choose Your Tour</h3>
                 <p className="text-gray-600">
-                  Click on any tour card to view detailed Vaxtrav information about the location. 
+                  Click on any tour card to view detailed Voxtrav information about the location. 
                   Each tour includes high-quality images and immersive audio content.
                 </p>
               </div>
