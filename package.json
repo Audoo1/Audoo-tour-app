@@ -1,5 +1,5 @@
 {
-  "name": "audoo-tour-app",
+  "name": "audoo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,8 +13,7 @@
     "react": "^18",
     "react-dom": "^18",
     "framer-motion": "^10.16.16",
-    "lucide-react": "^0.294.0",
-    "node-fetch": "^2.6.7"
+    "lucide-react": "^0.294.0"
   },
   "devDependencies": {
     "typescript": "^5",
