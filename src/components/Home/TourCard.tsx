@@ -16,12 +16,21 @@ export default function TourCard({ tour }: TourCardProps) {
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           {tour.image ? (
-            <Image
-              src={tour.image}
-              alt={tour.place}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            tour.image.includes('dropbox.com') ? (
+              <img
+                src={tour.image}
+                alt={tour.place}
+                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              />
+            ) : (
+              <Image
+                src={tour.image}
+                alt={tour.place}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            )
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
               <span className="text-gray-500 text-sm">No image available</span>
